@@ -1,8 +1,22 @@
-<<<<<<< Updated upstream
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
+  const [data1, setData] = useState([{}]);
+
+  useEffect(() => {
+    // Using fetch to fetch the data from Flask server
+    fetch("/hello")
+      .then(res => res.json())
+      .then(data => {
+        setData(data.hey); // Set the plain text data
+        console.log(data1)
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -100,35 +114,11 @@ const App = () => {
         <div>
           <h2>Thank you for submitting the form!</h2>
           <p>Here are the current YouTube terms and conditions:</p>
+          <p>{data1}</p>
           {/* Display YouTube terms and conditions here */}
         </div>
       )}
-=======
-import React, { useState, useEffect } from "react";
-import './App.css';
-
-function App() {
-  const [data1, setData] = useState([{}]);
-
-  useEffect(() => {
-    // Using fetch to fetch the data from Flask server
-    fetch("/hello")
-      .then(res => res.json())
-      .then(data => {
-        setData(data.hey); // Set the plain text data
-        console.log(data1)
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
-  return (
-    <div className="App">
-        <p>{data1}</p>
->>>>>>> Stashed changes
     </div>
   );
 };
-
 export default App;

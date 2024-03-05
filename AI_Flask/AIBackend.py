@@ -1,16 +1,10 @@
 from urllib.parse import unquote
-
 from flask import Flask
 from text import get_text
 
 app = Flask(__name__)
 
-
-<<<<<<< Updated upstream
-@app.route("/")
-=======
 @app.route("/hello")
->>>>>>> Stashed changes
 def hello_world():
     return {"hey":"Hello World!"}
 
