@@ -6,9 +6,13 @@ from text import get_text
 app = Flask(__name__)
 
 
+<<<<<<< Updated upstream
 @app.route("/")
+=======
+@app.route("/hello")
+>>>>>>> Stashed changes
 def hello_world():
-    return "Hello World!"
+    return {"hey":"Hello World!"}
 
 
 @app.route("/textof/<path:url>")
