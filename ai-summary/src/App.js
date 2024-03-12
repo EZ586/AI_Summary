@@ -2,123 +2,128 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
-  const [data1, setData] = useState([{}]);
+  const [tosText, setTOSText] = useState("")
+  const [jsonData, setJsonData] = useState([])
+  const [topic, setTopic] = useState("")
+  const [clarifyTopic, setClarifyTopic] = useState('')
+  const [clarifyTopicQuestion, setClarifyTopicQuestion] = useState('')
+  const [gptClarification, setGPTClarification] = useState('')
 
-  useEffect(() => {
-    // Using fetch to fetch the data from Flask server
-    fetch("/hello")
-      .then(res => res.json())
-      .then(data => {
-        setData(data.hey); // Set the plain text data
-        console.log(data1)
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+  const fetchData = async (link) => {
+    try {
+        const encodedLink = encodeURI(link)
+        const response = await fetch('http://127.0.0.1:5000/get/' + encodedLink + "/" + topic);
+        const jsonData = await response.json();
+        console.log(jsonData)
+        setJsonData(jsonData)
+    } catch (error) {
+        console.error('Error fetching data: ', error);
+    }
+};
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    agreement: false,
-    formSubmitted: false,
-  });
+  const fetchClarification = async ()=>{
+    console.log("fethinc")
+    const subheading = clarifyTopic
+    const url = tosText
+    const question = clarifyTopicQuestion
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
+    const encodedLink = encodeURI(url)
+    console.log(subheading)
+    console.log(url)
+    console.log(question)
+    const response = await fetch('http://127.0.0.1:5000/clarify/' + encodedLink + "/" + subheading + "/" + question);
+    const res = await response.text()
+    setGPTClarification(res)
+
+  }
+
+
+  const handleClarifyTopicQuestionChange=(e)=>{
+    setClarifyTopicQuestion(e.target.value)
+  }
+
+  const handleChangeClarifyTopic = (e) =>{
+    setClarifyTopic(e.target.value)
+    console.log(clarifyTopic)
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormData((prevData) => ({
-      ...prevData,
-      formSubmitted: true,
-    }));
+    fetchData(tosText)
   };
 
+  const handleClarificationQuestionSubmit = (e)=>{
+    e.preventDefault();
+    console.log("click")
+    fetchClarification()
+  }
+
+  const handleTOSChange = (e)=>{
+      setTOSText(e.target.value)
+  }
+
+  const handleTopicChange = (e) => {
+    setTopic(e.target.value)
+    console.log(topic)
+    
+  }
+
   return (
-    <div className="container">
-      {!formData.formSubmitted ? (
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">
-              Full Name:
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </label>
-          </div>
-          <div className="form-group">
-            <label className="form-label">
-              Email:
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </label>
-          </div>
-          <div className="form-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="agreement"
-                checked={formData.agreement}
-                onChange={handleChange}
-                required
-              />
-              I agree to the terms and conditions
-            </label>
-          </div>
-          {/* Default questions */}
-          <div className="form-group">
-            <label className="form-label">
-              Question 1:
-              <input
-                type="text"
-                name="question1"
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </label>
-          </div>
-          <div className="form-group">
-            <label className="form-label">
-              Question 2:
-              <input
-                type="text"
-                name="question2"
-                onChange={handleChange}
-                required
-                className="form-input"
-              />
-            </label>
-          </div>
-          {/* End of default questions */}
-          <button type="submit" className="submit-button">Submit</button>
-        </form>
-      ) : (
-        <div>
-          <h2>Thank you for submitting the form!</h2>
-          <p>Here are the current YouTube terms and conditions:</p>
-          <p>{data1}</p>
-          {/* Display YouTube terms and conditions here */}
+   <div>
+
+    <form>
+      <p>Put link to terms and conditions here: </p>
+      <input value={tosText} onChange={handleTOSChange}></input>
+      <hr></hr>
+      <label>Select the topic(s) is most relevant to you.</label>
+
+      <input type='radio' value="Don't focus on a specific topic, give a general summary." name='relevant-topic' onChange={handleTopicChange}></input>
+
+      <label> General Summary</label>
+      <input type='radio' value="Intellectual Property" name='relevant-topic' onChange={handleTopicChange}></input>
+
+
+      <label>Intellectual Property</label>
+      <input type='radio' value="Consumer Protections" name='relevant-topic' onChange={handleTopicChange}></input>
+
+      <label>Consumer Protections</label>
+      <input type='radio' value="Age Restrictions" name='relevant-topic' onChange={handleTopicChange}></input>
+
+      <label>Age Restrictions</label>
+
+      <label></label>
+      <hr></hr>
+      <button onClick={handleSubmit}>Submit</button>
+
+    </form>
+    <div>
+      {jsonData.map(item=>{
+        return <div>
+          <h1>{item.subheading}</h1>
+          <p>{item.body}</p>
         </div>
-      )}
+      })}
     </div>
+
+    <div>
+      <h1>Clarify a section</h1>
+      Clarify Section
+      <label htmlFor="clarify-topic">Select a section to clarify:</label>
+      <select name='clarify-topic' onChange={handleChangeClarifyTopic}>
+        {jsonData.map(item=>{
+          return <option value={item.subheading} >{item.subheading}</option>
+        })}
+      </select>
+
+      <label>Ask a clarification question.</label>
+      <input onChange={handleClarifyTopicQuestionChange}></input>
+      <button onClick={handleClarificationQuestionSubmit}>Submit</button>
+    </div>
+    <div>
+      {gptClarification}
+    </div>
+   </div>
   );
 };
 export default App;
