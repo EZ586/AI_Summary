@@ -1,7 +1,10 @@
 from openai import OpenAI
 import json
 
-client = OpenAI(api_key="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")
+f = open("apikeys.json")
+data = json.load(f)
+openaikey = data["openai"]
+client = OpenAI(api_key=openaikey)
 
 
 def get_gpt_response(relevant_topic, text):
