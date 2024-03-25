@@ -1,26 +1,42 @@
 .container {
   margin: auto;
-  width: 50%;
-  text-align: center;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.form-group {
-  margin-bottom: 10px;
+.linkArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.form-label {
+.linkArea p {
   margin-right: 10px;
 }
 
-.form-input {
-  margin-left: 10px;
-}
-
-.checkbox-label {
+label {
   margin-right: 10px;
 }
 
-.submit-button {
-  padding: 5px 10px;
-  cursor: pointer;
+.clarify {
+  width:100%;
+}
+
+button {
+  display: block;
+  margin: auto;
+}
+
+label {
+  margin-bottom: 100px;
+}
+
+.section {
+  margin-bottom: 15px;
+}
+
+.gptClarification {
+  margin-top: 10px;
 }

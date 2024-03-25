@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 const App = () => {
@@ -70,30 +70,30 @@ const App = () => {
   }
 
   return (
-   <div>
+   <div className='container'>
 
     <form>
-      <p>Put link to terms and conditions here: </p>
-      <input value={tosText} onChange={handleTOSChange}></input>
-      <hr></hr>
-      <label>Select the topic(s) is most relevant to you.</label>
+      <div className='linkArea'>
+        <p>Put link to terms and conditions here: </p>
+        <input value={tosText} onChange={handleTOSChange}></input>
+      </div>
 
-      <input type='radio' value="Don't focus on a specific topic, give a general summary." name='relevant-topic' onChange={handleTopicChange}></input>
+      <hr/>
 
-      <label> General Summary</label>
-      <input type='radio' value="Intellectual Property" name='relevant-topic' onChange={handleTopicChange}></input>
+      <label className='section'>Select the topic(s) is most relevant to you.</label>
+      <div>
+        <input type='radio' value="Don't focus on a specific topic, give a general summary." name='relevant-topic' onChange={handleTopicChange}></input>
+        <label> General Summary</label>
+        <input type='radio' value="Intellectual Property" name='relevant-topic' onChange={handleTopicChange}></input>
+        <label>Intellectual Property</label>
+        <input type='radio' value="Consumer Protections" name='relevant-topic' onChange={handleTopicChange}></input>
+        <label>Consumer Protections</label>
+        <input type='radio' value="Age Restrictions" name='relevant-topic' onChange={handleTopicChange}></input>
+        <label>Age Restrictions</label>
+      </div>
+   
+      <hr/>
 
-
-      <label>Intellectual Property</label>
-      <input type='radio' value="Consumer Protections" name='relevant-topic' onChange={handleTopicChange}></input>
-
-      <label>Consumer Protections</label>
-      <input type='radio' value="Age Restrictions" name='relevant-topic' onChange={handleTopicChange}></input>
-
-      <label>Age Restrictions</label>
-
-      <label></label>
-      <hr></hr>
       <button onClick={handleSubmit}>Submit</button>
 
     </form>
@@ -106,21 +106,23 @@ const App = () => {
       })}
     </div>
 
-    <div>
+    <div className='clarify'>
       <h1>Clarify a section</h1>
-      Clarify Section
-      <label htmlFor="clarify-topic">Select a section to clarify:</label>
-      <select name='clarify-topic' onChange={handleChangeClarifyTopic}>
-        {jsonData.map(item=>{
-          return <option value={item.subheading} >{item.subheading}</option>
-        })}
-      </select>
-
-      <label>Ask a clarification question.</label>
-      <input onChange={handleClarifyTopicQuestionChange}></input>
+      <div className='section'>
+        <label htmlFor="clarify-topic">Select a section to clarify:</label>
+        <select name='clarify-topic' onChange={handleChangeClarifyTopic}>
+          {jsonData.map(item=>{
+            return <option value={item.subheading} >{item.subheading}</option>
+          })}
+        </select>
+      </div>
+      <div className='section'>
+        <label>Ask a clarification question.</label>
+        <input onChange={handleClarifyTopicQuestionChange}></input>  
+      </div> 
       <button onClick={handleClarificationQuestionSubmit}>Submit</button>
     </div>
-    <div>
+    <div className='gptClarification'>
       {gptClarification}
     </div>
    </div>
