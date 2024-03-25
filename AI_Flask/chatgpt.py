@@ -10,7 +10,7 @@ client = OpenAI(api_key=openaikey)
 def get_gpt_response(relevant_topic, text):
     example = """"[{'subheading': 'Welcome to YouTube', 'body': 'This section introduces the relationship between users and YouTube, outlining the services offered by YouTube and identifying Google LLC as the service provider.'},{'subheading': 'Privacy', 'body': 'You are entittled to a certain expectation of privacy.'}]"""
 
-    template = """Summarize the following terms and conditiosn with a focus on {}. Here is the Terms and Conditions: {}. Give me a JSON list of multiple objects, where each object has a subheading field with the name of the subheading and a body field with the text of the comprehensive summary of the section. Here is an example: {}. Your reponse must only be a JSON list, not an object that is a field that has a value of a list. It should not be wrapped in triple backticks.""".format(
+    template = """Summarize the each section of the following terms and conditions with a focus on {}. Try to make each summary at least 2 sentences. Do not summarize any sections that are irrelevant to the focus. Here is the Terms and Conditions: {}. Give me a JSON list of multiple objects, where each object has a subheading field with the name of the subheading and a body field with the text of the comprehensive summary of the section. Here is an example: {}. Your reponse must only be a JSON list, not an object that is a field that has a value of a list. It should not be wrapped in triple backticks.""".format(
         relevant_topic, text, example
     )
     completion = client.chat.completions.create(
